@@ -692,8 +692,6 @@
 
 "@ledgerhq/cryptoassets@6.24.1":
   version "6.24.1"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/cryptoassets/-/cryptoassets-6.24.1.tgz#edac116eaa2d5da5e7c0cda3bc039aa6aedfd7d5"
-  integrity sha512-RCl2T5Qeu4fch5O+6pgT9s9AWs0ATWdBDwN2MSUuLxj7BfwdXig5+hcSObM3OIJPryNeDCtIYNK3z0blgxfTiA==
   dependencies:
     invariant "2"
 

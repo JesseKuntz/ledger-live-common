@@ -31,7 +31,8 @@
     "lib",
     "src",
     "react.js",
-    "reactNative.js"
+    "reactNative.js",
+    ".yalc"
   ],
   "peerDependencies": {
     "react": ">=16",
@@ -115,6 +116,7 @@
     "leb128": "^0.0.5",
     "lodash": "^4.17.21",
     "lru-cache": "5.1.1",
+    "mina-ledger-js": "^1.0.6",
     "numeral": "^2.0.6",
     "object-hash": "^2.2.0",
     "performance-now": "^2.1.0",

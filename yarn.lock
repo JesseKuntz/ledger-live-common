@@ -7118,6 +7118,13 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
+mina-ledger-js@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/mina-ledger-js/-/mina-ledger-js-1.0.6.tgz#3f8a8ddc71762a7c3a8f464f1be6b5703ce452f6"
+  integrity sha512-HhjuYWSOs8EedaXFI0mLP1hJGaBk7vH6sW9cUSWomqkMItqIJgHo7G6b5bgSguPnoLm7lrXBSYqSJ3SylZdFng==
+  dependencies:
+    buffer "6.0.3"
+
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
