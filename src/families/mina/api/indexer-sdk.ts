@@ -68,6 +68,7 @@ function getOperationValue(
 function getOperationExtra(transaction: MinaTransaction): MinaOperationExtra {
   return {
     memo: transaction.memo,
+    id: transaction.id,
   };
 }
 
@@ -101,11 +102,18 @@ function transactionToOperation(
 export const getOperations = async (
   accountId: string,
   address: string,
+  beforeId = 0,
   transactionsLimit: number = DEFAULT_TRANSACTIONS_LIMIT
 ): Promise<Operation[]> => {
+  let route = `/transactions?account=${address}&limit=${transactionsLimit}`;
+
+  if (beforeId) {
+    route += `&before_id=${beforeId}`;
+  }
+
   const { data: rawTransactions } = await network({
     method: "GET",
-    url: getUrl(`/transactions?account=${address}&limit=${transactionsLimit}`),
+    url: getUrl(route),
   });
 
   return rawTransactions.map((transaction) =>

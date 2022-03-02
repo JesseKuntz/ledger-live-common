@@ -14,6 +14,8 @@ export type NetworkInfoRaw = {
 };
 export type Transaction = TransactionCommon & {
   family: "mina";
+  mode: string;
+  memo: string | null | undefined;
 };
 export type TransactionRaw = TransactionCommonRaw & {
   family: "mina";

@@ -22,6 +22,7 @@ export type MinaTransaction = {
 
 export type MinaOperationExtra = {
   memo: string;
+  id: number;
 };
 
 export type MinaAccount = {
