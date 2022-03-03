@@ -8,6 +8,7 @@ import {
   MinaOperationExtra,
   MinaAccount,
 } from "./indexer-sdk.types";
+import { MinaAccountNotFound } from "../errors";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
 const getUrl = (route: string): string =>
@@ -32,7 +33,20 @@ const fetchStatus = async () => {
 };
 
 export const getAccount = async (address: string): Promise<MinaAccount> => {
-  const accountDetails = await fetchAccountDetails(address);
+  let accountDetails;
+
+  try {
+    accountDetails = await fetchAccountDetails(address);
+  } catch (e: any) {
+    if (e.status === 404) {
+      throw new MinaAccountNotFound("Account not found", {
+        reason: "account not activated",
+      });
+    }
+
+    throw e;
+  }
+
   const balance = new BigNumber(accountDetails.balance);
   const stakedBalance = new BigNumber(accountDetails.stake);
   const spendableBalance = balance.minus(stakedBalance);
