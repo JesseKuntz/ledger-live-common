@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import type {
   TransactionCommon,
   TransactionCommonRaw,
@@ -16,6 +17,7 @@ export type Transaction = TransactionCommon & {
   family: "mina";
   mode: string;
   memo: string | null | undefined;
+  fee: BigNumber;
 };
 export type TransactionRaw = TransactionCommonRaw & {
   family: "mina";

@@ -134,3 +134,8 @@ export const getOperations = async (
     transactionToOperation(accountId, address, transaction)
   );
 };
+
+// TODO: estimate fees (LEDGERLIVE-88)
+export const getFees = (): BigNumber => {
+  return new BigNumber(0.01);
+};

@@ -16,6 +16,11 @@ import {
 import { getMainAccount } from "../../../account";
 
 import { sync, scanAccounts } from "../js-synchronisation";
+import {
+  createTransaction,
+  updateTransaction,
+  prepareTransaction,
+} from "../js-transaction";
 
 const receive = makeAccountBridgeReceive();
 
@@ -29,15 +34,6 @@ const estimateMaxSpendable = ({ account, parentAccount, transaction }) => {
     BigNumber.max(0, mainAccount.balance.minus(estimatedFees))
   );
 };
-const createTransaction = (): Transaction => ({
-  family: "mina",
-  mode: "send",
-  amount: new BigNumber(0),
-  recipient: "",
-  useAllAmount: false,
-  memo: null,
-});
-const updateTransaction = (t, patch) => ({ ...t, ...patch });
 const getTransactionStatus = (account, t) => {
   const errors = {} as any;
   const warnings = {} as any;
@@ -75,7 +71,6 @@ const getTransactionStatus = (account, t) => {
     totalSpent,
   });
 };
-const prepareTransaction = async (a, t) => t;
 
 const currencyBridge: CurrencyBridge = {
   preload,

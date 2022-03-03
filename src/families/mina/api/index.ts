@@ -1,1 +1,1 @@
-export { getAccount, getOperations } from "./indexer-sdk";
+export { getAccount, getOperations, getFees } from "./indexer-sdk";
