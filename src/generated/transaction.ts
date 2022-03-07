@@ -14,6 +14,8 @@ import ethereum from "../families/ethereum/transaction";
 
 import filecoin from "../families/filecoin/transaction";
 
+import mina from "../families/mina/transaction";
+
 import neo from "../families/neo/transaction";
 
 import polkadot from "../families/polkadot/transaction";
@@ -38,6 +40,7 @@ export default {
   elrond,
   ethereum,
   filecoin,
+  mina,
   neo,
   polkadot,
   ripple,
