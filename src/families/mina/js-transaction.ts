@@ -28,7 +28,7 @@ export const prepareTransaction = async (
 ): Promise<Transaction> => {
   let fee = t.fee;
 
-  fee = await getEstimatedFees();
+  fee = await getEstimatedFees(a);
 
   if (!sameFees(t.fee, fee)) {
     return { ...t, fee };

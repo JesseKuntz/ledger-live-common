@@ -85,6 +85,11 @@ const envDefinitions = {
     def: "http://localhost:4444",
     desc: "Explorer API for Mina",
   },
+  API_MINA_GRAPHQL: {
+    parser: stringParser,
+    def: "http://localhost:5555",
+    desc: "GraphQL API for Mina",
+  },
   API_POLKADOT_INDEXER: {
     parser: stringParser,
     def: "https://polkadot.coin.ledger.com",

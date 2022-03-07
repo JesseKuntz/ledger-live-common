@@ -13,7 +13,6 @@ import {
   broadcast,
   isInvalidRecipient,
 } from "../../../bridge/mockHelpers";
-import { getMainAccount } from "../../../account";
 
 import { sync, scanAccounts } from "../js-synchronisation";
 import {
@@ -21,19 +20,13 @@ import {
   updateTransaction,
   prepareTransaction,
 } from "../js-transaction";
+import estimateMaxSpendable from "../js-estimateMaxSpendable";
 
 const receive = makeAccountBridgeReceive();
 
 // Mocks
 const preload = () => Promise.resolve({});
 const hydrate = (): void => {};
-const estimateMaxSpendable = ({ account, parentAccount, transaction }) => {
-  const mainAccount = getMainAccount(account, parentAccount);
-  const estimatedFees = transaction?.fees || new BigNumber(5000);
-  return Promise.resolve(
-    BigNumber.max(0, mainAccount.balance.minus(estimatedFees))
-  );
-};
 const getTransactionStatus = (account, t) => {
   const errors = {} as any;
   const warnings = {} as any;

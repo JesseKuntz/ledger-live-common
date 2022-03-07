@@ -11,13 +11,13 @@ import {
 import { MinaAccountNotFound } from "../errors";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
-const getUrl = (route: string): string =>
+const getIndexerUrl = (route: string): string =>
   `${getEnv("API_MINA_INDEXER")}${route || ""}`;
 
 const fetchAccountDetails = async (address: string) => {
   const { data } = await network({
     method: "GET",
-    url: getUrl(`/accounts/${address}`),
+    url: getIndexerUrl(`/accounts/${address}`),
   });
 
   return data;
@@ -26,7 +26,26 @@ const fetchAccountDetails = async (address: string) => {
 const fetchStatus = async () => {
   const { data } = await network({
     method: "GET",
-    url: getUrl(`/status`),
+    url: getIndexerUrl(`/status`),
+  });
+
+  return data;
+};
+
+const fetchTransactions = async (
+  address: string,
+  beforeId?: number,
+  transactionsLimit: number = DEFAULT_TRANSACTIONS_LIMIT
+) => {
+  let route = `/transactions?account=${address}&limit=${transactionsLimit}`;
+
+  if (beforeId) {
+    route += `&before_id=${beforeId}`;
+  }
+
+  const { data } = await network({
+    method: "GET",
+    url: getIndexerUrl(route),
   });
 
   return data;
@@ -116,26 +135,43 @@ function transactionToOperation(
 export const getOperations = async (
   accountId: string,
   address: string,
-  beforeId = 0,
-  transactionsLimit: number = DEFAULT_TRANSACTIONS_LIMIT
+  beforeId = 0
 ): Promise<Operation[]> => {
-  let route = `/transactions?account=${address}&limit=${transactionsLimit}`;
-
-  if (beforeId) {
-    route += `&before_id=${beforeId}`;
-  }
-
-  const { data: rawTransactions } = await network({
-    method: "GET",
-    url: getUrl(route),
-  });
+  const rawTransactions = await fetchTransactions(address, beforeId);
 
   return rawTransactions.map((transaction) =>
     transactionToOperation(accountId, address, transaction)
   );
 };
 
-// TODO: estimate fees (LEDGERLIVE-88)
-export const getFees = (): BigNumber => {
-  return new BigNumber(0.01);
+export const getFeesFromTransactionPool = async (): Promise<
+  MinaTransaction[]
+> => {
+  const query = `
+    query GetPooledCommands {
+      pooledUserCommands {
+        fee
+      }
+    }
+  `;
+
+  const { data } = await network({
+    method: "POST",
+    url: getEnv("API_MINA_GRAPHQL"),
+    data: {
+      query,
+      variables: {},
+      operationName: "GetPooledCommands",
+    },
+  });
+
+  return data?.data?.pooledUserCommands || [];
+};
+
+export const getFeesFromPreviousTransactions = async (
+  address: string
+): Promise<MinaTransaction[]> => {
+  const transactions = await fetchTransactions(address);
+
+  return transactions;
 };

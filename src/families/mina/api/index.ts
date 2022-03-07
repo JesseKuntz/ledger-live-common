@@ -1,1 +1,6 @@
-export { getAccount, getOperations, getFees } from "./indexer-sdk";
+export {
+  getAccount,
+  getOperations,
+  getFeesFromTransactionPool,
+  getFeesFromPreviousTransactions,
+} from "./indexer-sdk";
