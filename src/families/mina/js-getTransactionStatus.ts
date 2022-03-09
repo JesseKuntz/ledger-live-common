@@ -10,8 +10,7 @@ import {
 import type { Account, TransactionStatus } from "../../types";
 import type { Transaction } from "./types";
 
-import { isValidAddress } from "./logic";
-import { FALLBACK_FEE } from "./constants";
+import { FALLBACK_FEE, isValidAddress } from "./logic";
 
 const getTransactionStatus = async (
   a: Account,
@@ -23,7 +22,7 @@ const getTransactionStatus = async (
     recipient?: Error;
   } = {};
   const warnings: {
-    amount?: Error;
+    recipient?: Error;
   } = {};
   const useAllAmount = !!t.useAllAmount;
 
@@ -53,7 +52,7 @@ const getTransactionStatus = async (
   }
 
   if (a.freshAddress === t.recipient) {
-    errors.recipient = new InvalidAddressBecauseDestinationIsAlsoSource();
+    warnings.recipient = new InvalidAddressBecauseDestinationIsAlsoSource();
   }
 
   if (!t.recipient) {

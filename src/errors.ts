@@ -209,5 +209,6 @@ export const UnsupportedDerivation = createCustomErrorClass(
   "UnsupportedDerivation"
 );
 
+export * from "./families/mina/errors";
 export * from "./families/polkadot/errors";
 export * from "./families/solana/errors";

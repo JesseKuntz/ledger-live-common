@@ -2,10 +2,12 @@ import { MinaLedgerJS } from "mina-ledger-js";
 import type { Resolver } from "../../hw/getAddress/types";
 import { UserRefusedAddress, DisconnectedDevice } from "@ledgerhq/errors";
 
+import { getAccountNumberFromDerivationPath } from "./logic";
+
 const resolver: Resolver = async (transport, { path }) => {
   const mina = new MinaLedgerJS(transport);
 
-  const accountNumber = Number(path.split("/")[2].split("'")[0]);
+  const accountNumber = getAccountNumberFromDerivationPath(path);
 
   const {
     publicKey: address,

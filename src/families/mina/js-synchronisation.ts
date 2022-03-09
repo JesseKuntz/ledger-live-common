@@ -1,17 +1,10 @@
-import type { Account, Operation } from "../../types";
+import type { Account } from "../../types";
 import { encodeAccountId } from "../../account";
 import type { GetAccountShape } from "../../bridge/jsHelpers";
 import { makeSync, makeScanAccounts, mergeOps } from "../../bridge/jsHelpers";
 
 import { getAccount, getOperations } from "./api";
-
-const getBeforeId = (operations: Array<Operation>): number => {
-  if (operations.length) {
-    operations[operations.length - 1].extra.id;
-  }
-
-  return 0;
-};
+import { getLastId } from "./logic";
 
 const getAccountShape: GetAccountShape = async (info) => {
   const { address, initialAccount, currency, derivationMode } = info;
@@ -30,7 +23,7 @@ const getAccountShape: GetAccountShape = async (info) => {
   let operations = oldOperations;
   let newOperations = await getOperations(accountId, address);
   operations = mergeOps(operations, newOperations);
-  let beforeId = getBeforeId(newOperations);
+  let beforeId = getLastId(newOperations);
   const targetId = operations.length ? operations[0].extra.id : 0;
 
   // If there is a gap, get all operations (up to certain amount) between the last sync and now
@@ -40,7 +33,7 @@ const getAccountShape: GetAccountShape = async (info) => {
     do {
       newOperations = await getOperations(accountId, address, beforeId);
       operations = mergeOps(operations, newOperations);
-      beforeId = getBeforeId(newOperations);
+      beforeId = getLastId(newOperations);
     } while (--maxIteration && newOperations.length && beforeId > targetId);
   }
 
