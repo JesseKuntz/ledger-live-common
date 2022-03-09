@@ -5,9 +5,7 @@ import {
   getFeesFromTransactionPool,
   getFeesFromPreviousTransactions,
 } from "./api";
-
-const REQUIRED_TRANSACTION_AMOUNT = 5;
-const FALLBACK_FEE = 0.05;
+import { REQUIRED_TRANSACTION_AMOUNT, FALLBACK_FEE } from "./constants";
 
 const getEstimatedFees = async (a: Account): Promise<BigNumber> => {
   let fees = await getFeesFromTransactionPool();
