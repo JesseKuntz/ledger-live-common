@@ -1,7 +1,7 @@
 import type { Operation } from "../../types";
 
 export const REQUIRED_TRANSACTION_AMOUNT = 5;
-export const FALLBACK_FEE = 0.05;
+export const FALLBACK_FEE = 50000000;
 
 export const isValidAddress = (address: string): boolean => {
   const regex = new RegExp("^B62q[i-s][A-HJ-NP-Za-km-z1-9]{50}$");
