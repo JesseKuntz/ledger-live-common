@@ -29,4 +29,5 @@ export type MinaAccount = {
   blockHeight: number;
   balance: BigNumber;
   spendableBalance: BigNumber;
+  nonce: number;
 };

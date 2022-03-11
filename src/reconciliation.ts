@@ -27,6 +27,7 @@ import {
   fromTezosResourcesRaw,
   fromElrondResourcesRaw,
   fromCryptoOrgResourcesRaw,
+  fromMinaResourcesRaw,
   fromNFTRaw,
 } from "./account";
 import consoleWarnExpectToEqual from "./consoleWarnExpectToEqual";
@@ -380,6 +381,14 @@ export function patchAccount(
     next.cryptoOrgResources = fromCryptoOrgResourcesRaw(
       updatedRaw.cryptoOrgResources
     );
+    changed = true;
+  }
+
+  if (
+    updatedRaw.minaResources &&
+    account.minaResources !== updatedRaw.minaResources
+  ) {
+    next.minaResources = fromMinaResourcesRaw(updatedRaw.minaResources);
     changed = true;
   }
 

@@ -73,8 +73,6 @@ import { CoreOperationSpecifics as CoreOperationSpecifics_mina } from "../famili
 import { CoreCurrencySpecifics as CoreCurrencySpecifics_mina } from "../families/mina/types";
 import { Transaction as minaTransaction } from "../families/mina/types";
 import { TransactionRaw as minaTransactionRaw } from "../families/mina/types";
-import { NetworkInfo as minaNetworkInfo } from "../families/mina/types";
-import { NetworkInfoRaw as minaNetworkInfoRaw } from "../families/mina/types";
 import { reflect as neoReflect } from "../families/neo/types";
 import { CoreStatics as CoreStatics_neo } from "../families/neo/types";
 import { CoreAccountSpecifics as CoreAccountSpecifics_neo } from "../families/neo/types";
@@ -244,7 +242,6 @@ export type NetworkInfo =
   | elrondNetworkInfo
   | ethereumNetworkInfo
   | filecoinNetworkInfo
-  | minaNetworkInfo
   | neoNetworkInfo
   | rippleNetworkInfo
   | stellarNetworkInfo
@@ -257,7 +254,6 @@ export type NetworkInfoRaw =
   | elrondNetworkInfoRaw
   | ethereumNetworkInfoRaw
   | filecoinNetworkInfoRaw
-  | minaNetworkInfoRaw
   | neoNetworkInfoRaw
   | rippleNetworkInfoRaw
   | stellarNetworkInfoRaw

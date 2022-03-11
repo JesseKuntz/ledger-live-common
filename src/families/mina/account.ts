@@ -1,4 +1,17 @@
-import type { Operation } from "../../types";
+import type { Account, Operation } from "../../types";
+
+function formatAccountSpecifics(account: Account): string {
+  const { minaResources } = account;
+  if (!minaResources) {
+    throw new Error("mina account expected");
+  }
+
+  let str = " ";
+
+  str += minaResources.nonce ? `\n    Nonce: ${minaResources.nonce}` : "";
+
+  return str;
+}
 
 function formatOperationSpecifics(op: Operation): string {
   const { memo, id } = op.extra;
@@ -12,5 +25,6 @@ function formatOperationSpecifics(op: Operation): string {
 }
 
 export default {
+  formatAccountSpecifics,
   formatOperationSpecifics,
 };

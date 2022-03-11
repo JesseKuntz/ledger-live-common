@@ -49,6 +49,10 @@ import {
   fromCryptoOrgResourcesRaw,
 } from "../families/crypto_org/serialization";
 import {
+  toMinaResourcesRaw,
+  fromMinaResourcesRaw,
+} from "../families/mina/serialization";
+import {
   getCryptoCurrencyById,
   getTokenById,
   findTokenById,
@@ -68,6 +72,7 @@ export { toPolkadotResourcesRaw, fromPolkadotResourcesRaw };
 export { toTezosResourcesRaw, fromTezosResourcesRaw };
 export { toElrondResourcesRaw, fromElrondResourcesRaw };
 export { toCryptoOrgResourcesRaw, fromCryptoOrgResourcesRaw };
+export { toMinaResourcesRaw, fromMinaResourcesRaw };
 
 export function toBalanceHistoryRaw(b: BalanceHistory): BalanceHistoryRaw {
   return b.map(({ date, value }) => [date.toISOString(), value.toString()]);
@@ -707,6 +712,7 @@ export function fromAccountRaw(rawAccount: AccountRaw): Account {
     polkadotResources,
     elrondResources,
     cryptoOrgResources,
+    minaResources,
     nfts,
   } = rawAccount;
   const subAccounts =
@@ -828,6 +834,10 @@ export function fromAccountRaw(rawAccount: AccountRaw): Account {
     res.cryptoOrgResources = fromCryptoOrgResourcesRaw(cryptoOrgResources);
   }
 
+  if (minaResources) {
+    res.minaResources = fromMinaResourcesRaw(minaResources);
+  }
+
   return res;
 }
 export function toAccountRaw({
@@ -866,6 +876,7 @@ export function toAccountRaw({
   polkadotResources,
   elrondResources,
   cryptoOrgResources,
+  minaResources,
   nfts,
 }: Account): AccountRaw {
   const res: AccountRaw = {
@@ -945,6 +956,9 @@ export function toAccountRaw({
   }
   if (cryptoOrgResources) {
     res.cryptoOrgResources = toCryptoOrgResourcesRaw(cryptoOrgResources);
+  }
+  if (minaResources) {
+    res.minaResources = toMinaResourcesRaw(minaResources);
   }
   return res;
 }

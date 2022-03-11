@@ -18,7 +18,9 @@ const getAccountShape: GetAccountShape = async (info) => {
     derivationMode,
   });
 
-  const { blockHeight, balance, spendableBalance } = await getAccount(address);
+  const { blockHeight, balance, spendableBalance, nonce } = await getAccount(
+    address
+  );
 
   let operations = oldOperations;
   let newOperations = await getOperations(accountId, address);
@@ -43,6 +45,9 @@ const getAccountShape: GetAccountShape = async (info) => {
     spendableBalance,
     operationsCount: operations.length,
     blockHeight,
+    minaResources: {
+      nonce,
+    },
   };
 
   return { ...shape, operations };

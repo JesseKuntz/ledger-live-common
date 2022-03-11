@@ -75,6 +75,7 @@ export const getAccount = async (address: string): Promise<MinaAccount> => {
     blockHeight: indexerStatus.last_block_height,
     balance,
     spendableBalance,
+    nonce: accountDetails.nonce,
   };
 };
 

@@ -7,11 +7,11 @@ export type CoreStatics = Record<string, never>;
 export type CoreAccountSpecifics = Record<string, never>;
 export type CoreOperationSpecifics = Record<string, never>;
 export type CoreCurrencySpecifics = Record<string, never>;
-export type NetworkInfo = {
-  family: "mina";
+export type MinaResources = {
+  nonce: number;
 };
-export type NetworkInfoRaw = {
-  family: "mina";
+export type MinaResourcesRaw = {
+  nonce: number;
 };
 export type Transaction = TransactionCommon & {
   family: "mina";
