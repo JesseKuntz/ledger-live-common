@@ -9,7 +9,6 @@ import {
 } from "@ledgerhq/errors";
 import type { Account, TransactionStatus } from "../../types";
 import type { Transaction } from "./types";
-
 import { FALLBACK_FEE, isValidAddress } from "./logic";
 
 const getTransactionStatus = async (
@@ -45,9 +44,7 @@ const getTransactionStatus = async (
     a.spendableBalance.lt(estimatedFees)
   ) {
     errors.amount = new NotEnoughBalance();
-  }
-
-  if (amount.lte(0) && !t.useAllAmount) {
+  } else if (amount.lte(0) && !t.useAllAmount) {
     errors.amount = new AmountRequired();
   }
 

@@ -1,11 +1,14 @@
 import { BigNumber } from "bignumber.js";
 import type { Account } from "../../types";
-
 import {
   getFeesFromTransactionPool,
   getFeesFromPreviousTransactions,
 } from "./api";
-import { REQUIRED_TRANSACTION_AMOUNT, FALLBACK_FEE } from "./logic";
+import {
+  REQUIRED_TRANSACTION_AMOUNT,
+  FALLBACK_FEE,
+  LOWER_BOUND_FEE,
+} from "./logic";
 
 const getEstimatedFees = async (a: Account): Promise<BigNumber> => {
   let fees = await getFeesFromTransactionPool();
@@ -27,7 +30,14 @@ const getEstimatedFees = async (a: Account): Promise<BigNumber> => {
     }
   });
 
-  return totalFees.div(fees.length);
+  const fee = totalFees.div(fees.length).integerValue();
+  const lowerBoundFee = new BigNumber(LOWER_BOUND_FEE);
+
+  if (fee.lt(lowerBoundFee)) {
+    return lowerBoundFee;
+  }
+
+  return fee;
 };
 
 export default getEstimatedFees;

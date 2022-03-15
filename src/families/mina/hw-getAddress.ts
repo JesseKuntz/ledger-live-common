@@ -1,31 +1,15 @@
-import { MinaLedgerJS } from "mina-ledger-js";
 import type { Resolver } from "../../hw/getAddress/types";
-import { UserRefusedAddress, DisconnectedDevice } from "@ledgerhq/errors";
 
-import { getAccountNumberFromDerivationPath } from "./logic";
+import Mina from "./hw-app-mina";
 
 const resolver: Resolver = async (transport, { path }) => {
-  const mina = new MinaLedgerJS(transport);
+  const myCoin = new Mina(transport);
 
-  const accountNumber = getAccountNumberFromDerivationPath(path);
-
-  const {
-    publicKey: address,
-    message,
-    statusText,
-  } = await mina.getAddress(accountNumber);
-
-  if (message === "DisconnectedDevice") {
-    throw new DisconnectedDevice();
-  }
-
-  if (statusText === "CONDITIONS_OF_USE_NOT_SATISFIED") {
-    throw new UserRefusedAddress();
-  }
+  const r = await myCoin.getAddress(path);
 
   return {
-    address,
-    publicKey: "",
+    address: r.address,
+    publicKey: r.publicKey,
     path,
   };
 };

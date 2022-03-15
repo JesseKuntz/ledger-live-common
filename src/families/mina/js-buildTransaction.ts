@@ -1,13 +1,12 @@
-import {
-  SignTransactionArgs,
-  TxType,
-  Networks,
-} from "mina-ledger-js/src/types";
+import { SignTransactionArgs, TxType, Networks } from "mina-ledger-js";
 import type { Account } from "../../types";
 import { AccountNeedResync } from "../../errors";
 import type { Transaction } from "./types";
-
-import { FALLBACK_FEE, getAccountNumberFromDerivationPath } from "./logic";
+import {
+  FALLBACK_FEE,
+  getAccountNumberFromDerivationPath,
+  getNonce,
+} from "./logic";
 
 const getTransactionType = (t: Transaction) => {
   switch (t.mode) {
@@ -38,7 +37,7 @@ export const buildTransaction = (
     receiverAddress: t.recipient,
     amount: t.amount.toNumber(),
     fee,
-    nonce: a.minaResources?.nonce || 0,
+    nonce: getNonce(a),
     memo: t.memo || undefined,
     networkId: Networks.MAINNET,
   };
