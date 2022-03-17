@@ -31,3 +31,11 @@ export type MinaAccount = {
   spendableBalance: BigNumber;
   nonce: number;
 };
+
+export type SendPaymentArgs = {
+  fee: string;
+  amount: string;
+  recipient: string;
+  sender: string;
+  signature: string;
+};

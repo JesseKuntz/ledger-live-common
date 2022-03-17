@@ -7,6 +7,7 @@ import {
   MinaTransaction,
   MinaOperationExtra,
   MinaAccount,
+  SendPaymentArgs,
 } from "./indexer-sdk.types";
 import { MinaAccountNotFound } from "../errors";
 
@@ -175,4 +176,37 @@ export const getFeesFromPreviousTransactions = async (
   const transactions = await fetchTransactions(address);
 
   return transactions;
+};
+
+export const sendPayment = async ({
+  fee,
+  amount,
+  recipient,
+  sender,
+  signature,
+}: SendPaymentArgs): Promise<string> => {
+  const query = `
+    mutation SendPayment($fee: UInt64!, $amount: UInt64!, $recipient: PublicKey!, $sender: PublicKey!, $signature: String) {
+      sendPayment(
+        input: {fee: $fee, amount: $amount, to: $recipient, from: $sender, validUntil: "4294967295"},
+        signature: {rawSignature: $signature}
+      ) {
+        payment {
+          hash
+        }
+      }
+    }
+  `;
+
+  const { data } = await network({
+    method: "POST",
+    url: getEnv("API_MINA_GRAPHQL"),
+    data: {
+      query,
+      variables: { fee, amount, recipient, sender, signature },
+      operationName: "SendPayment",
+    },
+  });
+
+  return data?.data?.sendPayment?.payment?.hash;
 };

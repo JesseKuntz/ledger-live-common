@@ -1,7 +1,6 @@
 import type { AccountBridge, CurrencyBridge } from "../../../types";
 import type { Transaction } from "../types";
 import { makeAccountBridgeReceive } from "../../../bridge/jsHelpers";
-import { broadcast } from "../../../bridge/mockHelpers";
 
 import { sync, scanAccounts } from "../js-synchronisation";
 import {
@@ -12,6 +11,7 @@ import {
 import estimateMaxSpendable from "../js-estimateMaxSpendable";
 import getTransactionStatus from "../js-getTransactionStatus";
 import signOperation from "../js-signOperation";
+import broadcast from "../js-broadcast";
 
 const receive = makeAccountBridgeReceive();
 
