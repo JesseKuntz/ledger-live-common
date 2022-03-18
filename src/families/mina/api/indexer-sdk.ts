@@ -101,7 +101,6 @@ function getOperationValue(
 
 function getOperationExtra(transaction: MinaTransaction): MinaOperationExtra {
   return {
-    memo: transaction.memo,
     id: transaction.id,
   };
 }

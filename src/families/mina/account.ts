@@ -14,11 +14,10 @@ function formatAccountSpecifics(account: Account): string {
 }
 
 function formatOperationSpecifics(op: Operation): string {
-  const { memo, id } = op.extra;
+  const { id } = op.extra;
 
   let str = " ";
 
-  str += memo ? `\n    Memo: ${memo}` : "";
   str += id ? `\n    Id: ${id}` : "";
 
   return str;

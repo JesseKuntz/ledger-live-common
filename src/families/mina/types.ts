@@ -16,13 +16,11 @@ export type MinaResourcesRaw = {
 export type Transaction = TransactionCommon & {
   family: "mina";
   mode: string;
-  memo: string | null;
   fees: BigNumber | null;
 };
 export type TransactionRaw = TransactionCommonRaw & {
   family: "mina";
   mode: string;
-  memo: string | null;
   fees: string | null;
 };
 export const reflect = (_declare: any) => {};

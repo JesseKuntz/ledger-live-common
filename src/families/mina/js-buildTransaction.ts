@@ -38,7 +38,6 @@ export const buildTransaction = (
     amount: t.amount.toNumber(),
     fee,
     nonce: getNonce(a),
-    memo: t.memo || undefined,
     networkId: Networks.MAINNET,
   };
 

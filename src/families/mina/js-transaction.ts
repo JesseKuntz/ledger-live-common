@@ -12,7 +12,6 @@ export const createTransaction = (): Transaction => ({
   mode: "send",
   amount: new BigNumber(0),
   recipient: "",
-  memo: "",
   useAllAmount: false,
   fees: new BigNumber(0),
 });
