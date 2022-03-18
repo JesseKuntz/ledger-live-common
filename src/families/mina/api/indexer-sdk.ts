@@ -34,11 +34,15 @@ const fetchStatus = async () => {
 };
 
 const fetchTransactions = async (
-  address: string,
+  address?: string,
   beforeId?: number,
   transactionsLimit: number = DEFAULT_TRANSACTIONS_LIMIT
 ) => {
-  let route = `/transactions?account=${address}&limit=${transactionsLimit}`;
+  let route = `/transactions?limit=${transactionsLimit}`;
+
+  if (address) {
+    route += `&account=${address}`;
+  }
 
   if (beforeId) {
     route += `&before_id=${beforeId}`;
@@ -146,7 +150,7 @@ export const getOperations = async (
   );
 };
 
-export const getFeesFromTransactionPool = async (): Promise<
+export const getTransactionsFromTransactionPool = async (): Promise<
   MinaTransaction[]
 > => {
   const query = `
@@ -170,10 +174,8 @@ export const getFeesFromTransactionPool = async (): Promise<
   return data?.data?.pooledUserCommands || [];
 };
 
-export const getFeesFromPreviousTransactions = async (
-  address: string
-): Promise<MinaTransaction[]> => {
-  const transactions = await fetchTransactions(address);
+export const getLatestTransactions = async (): Promise<MinaTransaction[]> => {
+  const transactions = await fetchTransactions();
 
   return transactions;
 };

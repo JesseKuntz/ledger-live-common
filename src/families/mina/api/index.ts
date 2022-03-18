@@ -1,7 +1,7 @@
 export {
   getAccount,
   getOperations,
-  getFeesFromTransactionPool,
-  getFeesFromPreviousTransactions,
+  getTransactionsFromTransactionPool,
+  getLatestTransactions,
   sendPayment,
 } from "./indexer-sdk";

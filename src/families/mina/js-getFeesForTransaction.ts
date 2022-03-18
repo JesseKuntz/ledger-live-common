@@ -1,43 +1,45 @@
 import { BigNumber } from "bignumber.js";
-import type { Account } from "../../types";
 import {
-  getFeesFromTransactionPool,
-  getFeesFromPreviousTransactions,
+  getTransactionsFromTransactionPool,
+  getLatestTransactions,
 } from "./api";
 import {
   REQUIRED_TRANSACTION_AMOUNT,
   FALLBACK_FEE,
   LOWER_BOUND_FEE,
+  roundUpBigNumber,
 } from "./logic";
 
-const getEstimatedFees = async (a: Account): Promise<BigNumber> => {
-  let fees = await getFeesFromTransactionPool();
+const getEstimatedFees = async (): Promise<BigNumber> => {
+  let transactions = await getTransactionsFromTransactionPool();
 
-  if (fees.length < REQUIRED_TRANSACTION_AMOUNT) {
-    fees = await getFeesFromPreviousTransactions(a.freshAddress);
+  if (transactions.length < REQUIRED_TRANSACTION_AMOUNT) {
+    transactions = await getLatestTransactions();
   }
 
-  if (!fees.length) {
+  transactions = transactions.filter(({ fee }) => fee);
+
+  if (!transactions.length) {
     return new BigNumber(FALLBACK_FEE);
   }
 
   let totalFees = new BigNumber(0);
 
-  fees.forEach(({ fee: rawFee, failure_reason = null }) => {
+  transactions.forEach(({ fee: rawFee, failure_reason = null }) => {
     if (!failure_reason) {
       const fee = new BigNumber(rawFee);
       totalFees = totalFees.plus(fee);
     }
   });
 
-  const fee = totalFees.div(fees.length).integerValue();
+  const fee = totalFees.div(transactions.length);
   const lowerBoundFee = new BigNumber(LOWER_BOUND_FEE);
 
   if (fee.lt(lowerBoundFee)) {
     return lowerBoundFee;
   }
 
-  return fee;
+  return roundUpBigNumber(fee);
 };
 
 export default getEstimatedFees;

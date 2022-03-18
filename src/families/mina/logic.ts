@@ -1,9 +1,13 @@
+import { BigNumber } from "bignumber.js";
 import type { Account, Operation } from "../../types";
 
-export const REQUIRED_TRANSACTION_AMOUNT = 5;
+export const REQUIRED_TRANSACTION_AMOUNT = 10;
 export const FALLBACK_FEE = 50000000;
 export const LOWER_BOUND_FEE = 1000000;
 
+/**
+ * Validate a Mina address.
+ */
 export const isValidAddress = (address: string): boolean => {
   const regex = new RegExp("^B62q[i-s][A-HJ-NP-Za-km-z1-9]{50}$");
 
@@ -20,9 +24,6 @@ export const getAccountNumberFromDerivationPath = (path: string): number => {
   return Number(accountNumber);
 };
 
-/**
- * Get the final ID from a list of operations.
- */
 export const getLastId = (operations: Array<Operation>): number => {
   if (operations.length) {
     operations[operations.length - 1].extra.id;
@@ -41,4 +42,11 @@ export const getNonce = (a: Account): number => {
   );
 
   return nonce;
+};
+
+export const roundUpBigNumber = (bigNumber: BigNumber): BigNumber => {
+  const number = bigNumber.toNumber();
+  const roundedNumber = Math.ceil(number);
+
+  return new BigNumber(roundedNumber);
 };
