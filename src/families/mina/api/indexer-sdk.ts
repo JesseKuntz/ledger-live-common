@@ -3,12 +3,7 @@ import network from "../../../network";
 import { getEnv } from "../../../env";
 import { encodeOperationId } from "../../../operation";
 import { Operation, OperationType } from "../../../types";
-import {
-  MinaTransaction,
-  MinaOperationExtra,
-  MinaAccount,
-  SendPaymentArgs,
-} from "./indexer-sdk.types";
+import { MinaTransaction, MinaOperationExtra, MinaAccount } from "./sdk.types";
 import { MinaAccountNotFound } from "../errors";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
@@ -150,65 +145,8 @@ export const getOperations = async (
   );
 };
 
-export const getTransactionsFromTransactionPool = async (): Promise<
-  MinaTransaction[]
-> => {
-  const query = `
-    query GetPooledCommands {
-      pooledUserCommands {
-        fee
-      }
-    }
-  `;
-
-  const { data } = await network({
-    method: "POST",
-    url: getEnv("API_MINA_GRAPHQL"),
-    data: {
-      query,
-      variables: {},
-      operationName: "GetPooledCommands",
-    },
-  });
-
-  return data?.data?.pooledUserCommands || [];
-};
-
 export const getLatestTransactions = async (): Promise<MinaTransaction[]> => {
   const transactions = await fetchTransactions();
 
   return transactions;
-};
-
-export const sendPayment = async ({
-  fee,
-  amount,
-  recipient,
-  sender,
-  signature,
-}: SendPaymentArgs): Promise<string> => {
-  const query = `
-    mutation SendPayment($fee: UInt64!, $amount: UInt64!, $recipient: PublicKey!, $sender: PublicKey!, $signature: String) {
-      sendPayment(
-        input: {fee: $fee, amount: $amount, to: $recipient, from: $sender, validUntil: "4294967295"},
-        signature: {rawSignature: $signature}
-      ) {
-        payment {
-          hash
-        }
-      }
-    }
-  `;
-
-  const { data } = await network({
-    method: "POST",
-    url: getEnv("API_MINA_GRAPHQL"),
-    data: {
-      query,
-      variables: { fee, amount, recipient, sender, signature },
-      operationName: "SendPayment",
-    },
-  });
-
-  return data?.data?.sendPayment?.payment?.hash;
 };
