@@ -55,7 +55,7 @@ const signOperation = ({
           type: "device-signature-requested",
         });
 
-        if (!transaction.fee) {
+        if (!transaction.fees) {
           throw new FeeNotLoaded();
         }
 
@@ -71,7 +71,7 @@ const signOperation = ({
         const operation = buildOptimisticOperation(
           account,
           transaction,
-          transaction.fee ?? new BigNumber(0)
+          transaction.fees ?? new BigNumber(0)
         );
 
         o.next({

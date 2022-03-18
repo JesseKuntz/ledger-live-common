@@ -28,7 +28,7 @@ export const buildTransaction = (
   const senderAccount = getAccountNumberFromDerivationPath(
     a.freshAddresses[0].derivationPath
   );
-  const fee = t?.fee ? t.fee.toNumber() : FALLBACK_FEE;
+  const fee = t?.fees ? t.fees.toNumber() : FALLBACK_FEE;
 
   const unsigned = {
     txType: getTransactionType(t),

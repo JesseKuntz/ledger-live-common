@@ -14,7 +14,7 @@ export const createTransaction = (): Transaction => ({
   recipient: "",
   memo: "",
   useAllAmount: false,
-  fee: new BigNumber(0),
+  fees: new BigNumber(0),
 });
 
 export const updateTransaction = (
@@ -26,12 +26,12 @@ export const prepareTransaction = async (
   a: Account,
   t: Transaction
 ): Promise<Transaction> => {
-  let fee = t.fee;
+  let fees = t.fees;
 
-  fee = await getEstimatedFees();
+  fees = await getEstimatedFees();
 
-  if (!sameFees(t.fee, fee)) {
-    return { ...t, fee };
+  if (!sameFees(t.fees, fees)) {
+    return { ...t, fees };
   }
 
   return t;

@@ -16,7 +16,7 @@ const getTransactionStatus = async (
   t: Transaction
 ): Promise<TransactionStatus> => {
   const errors: {
-    fee?: Error;
+    fees?: Error;
     amount?: Error;
     recipient?: Error;
   } = {};
@@ -25,11 +25,11 @@ const getTransactionStatus = async (
   } = {};
   const useAllAmount = !!t.useAllAmount;
 
-  if (!t.fee) {
-    errors.fee = new FeeNotLoaded();
+  if (!t.fees) {
+    errors.fees = new FeeNotLoaded();
   }
 
-  const estimatedFees = t.fee || new BigNumber(FALLBACK_FEE);
+  const estimatedFees = t.fees || new BigNumber(FALLBACK_FEE);
 
   const totalSpent = useAllAmount
     ? a.spendableBalance
