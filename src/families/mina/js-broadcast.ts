@@ -1,7 +1,7 @@
 import { BigNumber } from "bignumber.js";
 import type { Operation, SignedOperation } from "../../types";
 import { patchOperationWithHash } from "../../operation";
-
+import { AccountNeedResync } from "../../errors";
 import { sendPayment } from "./api";
 
 const broadcast = async ({
@@ -18,6 +18,12 @@ const broadcast = async ({
     sender: senders[0],
     signature,
   });
+
+  // If hash is missing, something went wrong with broadcasting
+  // and an account resync will update the nonce (common issue)
+  if (!hash) {
+    throw new AccountNeedResync();
+  }
 
   return patchOperationWithHash(operation, hash);
 };

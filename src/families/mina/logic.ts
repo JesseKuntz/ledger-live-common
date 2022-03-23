@@ -1,5 +1,6 @@
 import { BigNumber } from "bignumber.js";
 import type { Account, Operation } from "../../types";
+import { AccountNeedResync } from "../../errors";
 
 export const REQUIRED_TRANSACTION_AMOUNT = 10;
 export const FALLBACK_FEE = 50000000;
@@ -33,15 +34,11 @@ export const getLastId = (operations: Array<Operation>): number => {
 };
 
 export const getNonce = (a: Account): number => {
-  const lastPendingOp = a.pendingOperations[0];
-  const nonce = Math.max(
-    a.minaResources?.nonce || 0,
-    lastPendingOp && typeof lastPendingOp.transactionSequenceNumber === "number"
-      ? lastPendingOp.transactionSequenceNumber + 1
-      : 0
-  );
+  if (a.minaResources?.nonce) {
+    return a.minaResources.nonce + a.pendingOperations.length;
+  }
 
-  return nonce;
+  throw new AccountNeedResync();
 };
 
 export const roundUpBigNumber = (bigNumber: BigNumber): BigNumber => {

@@ -125,9 +125,6 @@ function transactionToOperation(
     extra: getOperationExtra(transaction),
     senders: transaction.sender ? [transaction.sender] : [],
     recipients: transaction.receiver ? [transaction.receiver] : [],
-    transactionSequenceNumber: isSender(transaction, address)
-      ? transaction.nonce || transaction.sequence_number
-      : undefined,
     hasFailed: !!transaction.failure_reason,
   };
 }
