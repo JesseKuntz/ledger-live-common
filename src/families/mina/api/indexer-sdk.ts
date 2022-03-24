@@ -67,14 +67,12 @@ export const getAccount = async (address: string): Promise<MinaAccount> => {
   }
 
   const balance = new BigNumber(accountDetails.balance);
-  const stakedBalance = new BigNumber(accountDetails.stake || 0);
-  const spendableBalance = balance.minus(stakedBalance);
   const indexerStatus = await fetchStatus();
 
   return {
     blockHeight: indexerStatus.last_block_height,
     balance,
-    spendableBalance,
+    spendableBalance: balance,
     nonce: accountDetails.nonce,
   };
 };
