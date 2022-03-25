@@ -1,3 +1,4 @@
+import { BigNumber } from "bignumber.js";
 import { SignTransactionArgs, TxType, Networks } from "mina-ledger-js";
 import type { Account } from "../../types";
 import { AccountNeedResync } from "../../errors";
@@ -28,6 +29,9 @@ export const buildTransaction = (
   const senderAccount = getAccountNumberFromDerivationPath(
     a.freshAddresses[0].derivationPath
   );
+  const amount = t.useAllAmount
+    ? a.spendableBalance.minus(t.fees || new BigNumber(FALLBACK_FEE))
+    : t.amount;
   const fee = t?.fees ? t.fees.toNumber() : FALLBACK_FEE;
 
   const unsigned = {
@@ -35,7 +39,7 @@ export const buildTransaction = (
     senderAccount: senderAccount,
     senderAddress: a.freshAddress,
     receiverAddress: t.recipient,
-    amount: t.amount.toNumber(),
+    amount: amount.toNumber(),
     fee,
     nonce: getNonce(a),
     networkId: Networks.MAINNET,
