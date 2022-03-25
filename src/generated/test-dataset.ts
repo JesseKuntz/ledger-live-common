@@ -12,6 +12,8 @@ import ethereum from "../families/ethereum/test-dataset";
 
 import filecoin from "../families/filecoin/test-dataset";
 
+import mina from "../families/mina/test-dataset";
+
 import polkadot from "../families/polkadot/test-dataset";
 
 import ripple from "../families/ripple/test-dataset";
@@ -33,6 +35,7 @@ export default {
   elrond,
   ethereum,
   filecoin,
+  mina,
   polkadot,
   ripple,
   solana,
