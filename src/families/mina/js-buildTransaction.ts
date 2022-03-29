@@ -29,17 +29,14 @@ export const buildTransaction = (
   const senderAccount = getAccountNumberFromDerivationPath(
     a.freshAddresses[0].derivationPath
   );
-  const amount = t.useAllAmount
-    ? a.spendableBalance.minus(t.fees || new BigNumber(FALLBACK_FEE))
-    : t.amount;
   const fee = t?.fees ? t.fees.toNumber() : FALLBACK_FEE;
 
   const unsigned = {
     txType: getTransactionType(t),
-    senderAccount: senderAccount,
+    senderAccount,
     senderAddress: a.freshAddress,
     receiverAddress: t.recipient,
-    amount: amount.toNumber(),
+    amount: t.amount.toNumber(),
     fee,
     nonce: getNonce(a),
     networkId: Networks.MAINNET,

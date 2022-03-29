@@ -2,10 +2,8 @@ import { $Shape } from "utility-types";
 import { BigNumber } from "bignumber.js";
 import type { Account } from "../../types";
 import type { Transaction } from "./types";
-
 import getEstimatedFees from "./js-getFeesForTransaction";
-
-const sameFees = (a, b) => (!a || !b ? a === b : a.eq(b));
+import estimateMaxSpendable from "./js-estimateMaxSpendable";
 
 export const createTransaction = (): Transaction => ({
   family: "mina",
@@ -25,13 +23,11 @@ export const prepareTransaction = async (
   a: Account,
   t: Transaction
 ): Promise<Transaction> => {
-  let fees = t.fees;
+  const fees = await getEstimatedFees();
 
-  fees = await getEstimatedFees();
+  const amount = t.useAllAmount
+    ? await estimateMaxSpendable({ account: a, calculatedFees: fees })
+    : t.amount;
 
-  if (!sameFees(t.fees, fees)) {
-    return { ...t, fees };
-  }
-
-  return t;
+  return { ...t, fees, amount };
 };
