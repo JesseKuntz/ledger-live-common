@@ -3,9 +3,9 @@ import type { Resolver } from "../../hw/getAddress/types";
 import Mina from "./hw-app-mina";
 
 const resolver: Resolver = async (transport, { path }) => {
-  const myCoin = new Mina(transport);
+  const mina = new Mina(transport);
 
-  const r = await myCoin.getAddress(path);
+  const r = await mina.getAddress(path);
 
   return {
     address: r.address,

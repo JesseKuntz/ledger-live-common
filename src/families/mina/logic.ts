@@ -5,6 +5,7 @@ import { AccountNeedResync } from "../../errors";
 export const REQUIRED_TRANSACTION_AMOUNT = 10;
 export const FALLBACK_FEE = 50000000;
 export const LOWER_BOUND_FEE = 1000000;
+export const NEW_ACCOUNT_FEE = 1000000000;
 
 /**
  * Validate a Mina address.
