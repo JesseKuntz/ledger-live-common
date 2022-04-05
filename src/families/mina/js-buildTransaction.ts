@@ -1,4 +1,3 @@
-import { BigNumber } from "bignumber.js";
 import { SignTransactionArgs, TxType, Networks } from "mina-ledger-js";
 import type { Account } from "../../types";
 import { AccountNeedResync } from "../../errors";

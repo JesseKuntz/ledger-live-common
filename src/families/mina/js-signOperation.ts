@@ -7,7 +7,7 @@ import { open, close } from "../../hw";
 import { encodeOperationId } from "../../operation";
 import Mina from "./hw-app-mina";
 import { buildTransaction } from "./js-buildTransaction";
-import { getNonce } from "./logic";
+import { getNonce, reEncodeRawSignature } from "./logic";
 
 const buildOptimisticOperation = (
   account: Account,
@@ -62,7 +62,8 @@ const signOperation = ({
         const unsigned = await buildTransaction(account, transaction);
 
         const mina = new Mina(transport);
-        const signature = await mina.signTransaction(unsigned);
+        const rawSignature = await mina.signTransaction(unsigned);
+        const signature = reEncodeRawSignature(rawSignature);
 
         o.next({
           type: "device-signature-granted",

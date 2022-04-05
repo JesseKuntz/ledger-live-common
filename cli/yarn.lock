@@ -1048,6 +1048,7 @@
     leb128 "^0.0.5"
     lodash "^4.17.21"
     lru-cache "5.1.1"
+    mina-ledger-js "^1.0.6"
     numeral "^2.0.6"
     object-hash "^2.2.0"
     performance-now "^2.1.0"
@@ -5110,6 +5111,13 @@ min-document@^2.19.0:
   integrity sha1-e9KC4/WELtKVu3SM3Z8f+iyCRoU=
   dependencies:
     dom-walk "^0.1.0"
+
+mina-ledger-js@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/mina-ledger-js/-/mina-ledger-js-1.0.6.tgz#3f8a8ddc71762a7c3a8f464f1be6b5703ce452f6"
+  integrity sha512-HhjuYWSOs8EedaXFI0mLP1hJGaBk7vH6sW9cUSWomqkMItqIJgHo7G6b5bgSguPnoLm7lrXBSYqSJ3SylZdFng==
+  dependencies:
+    buffer "6.0.3"
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
