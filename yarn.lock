@@ -1343,10 +1343,15 @@
   dependencies:
     commander "^2.20.0"
 
-"@ledgerhq/cryptoassets@6.27.0", "@ledgerhq/cryptoassets@^6.27.0":
+"@ledgerhq/cryptoassets@^6.27.0":
   version "6.27.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/cryptoassets/-/cryptoassets-6.27.0.tgz#1a4efdef07858e8cb1b2dd4c1b9e110f1ed60f3f"
   integrity sha512-fM1tm+xJSkbgEB73RtWeTeogcWRkpAcgZX+hBGbvq7anhbRwF2jD4EL897SRNwDuvCKFfpSMxpSUaSvEmj9Lcw==
+  dependencies:
+    invariant "2"
+
+"@ledgerhq/cryptoassets@file:.yalc/@ledgerhq/cryptoassets":
+  version "6.27.1"
   dependencies:
     invariant "2"
 
