@@ -36,7 +36,11 @@ export const getLastId = (operations: Array<Operation>): number => {
 };
 
 export const getNonce = (a: Account): number => {
-  if (a.minaResources?.nonce) {
+  if (
+    a.minaResources?.nonce !== null &&
+    a.minaResources?.nonce !== undefined &&
+    a.minaResources?.nonce >= 0
+  ) {
     return a.minaResources.nonce + a.pendingOperations.length;
   }
 
