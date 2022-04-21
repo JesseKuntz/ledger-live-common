@@ -1,4 +1,4 @@
-import type { Account } from "../../types";
+import { BigNumber } from "bignumber.js";
 import { encodeAccountId } from "../../account";
 import type { GetAccountShape } from "../../bridge/jsHelpers";
 import { makeSync, makeScanAccounts, mergeOps } from "../../bridge/jsHelpers";
@@ -53,6 +53,29 @@ const getAccountShape: GetAccountShape = async (info) => {
   return { ...shape, operations };
 };
 
+const postSync = (_, synced) => {
+  let pendingOperations = synced.pendingOperations;
+
+  if (pendingOperations.length) {
+    pendingOperations = synced.pendingOperations.filter(
+      (pendingOperation) =>
+        !synced.operations.some(
+          (operation) => operation.hash === pendingOperation.hash
+        )
+    );
+  }
+
+  const pendingAmount = pendingOperations.reduce((acc, op) => {
+    return acc.plus(op.value);
+  }, new BigNumber(0));
+
+  return {
+    ...synced,
+    pendingOperations,
+    spendableBalance: synced.spendableBalance.minus(pendingAmount),
+  };
+};
+
 export const scanAccounts = makeScanAccounts({ getAccountShape });
 
-export const sync = makeSync({ getAccountShape });
+export const sync = makeSync({ getAccountShape, postSync });
