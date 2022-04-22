@@ -11,7 +11,7 @@ import type { Account, TransactionStatus } from "../../types";
 import { formatCurrencyUnit, getCryptoCurrencyById } from "../../currencies";
 import type { Transaction } from "./types";
 import { FALLBACK_FEE, NEW_ACCOUNT_FEE, isValidAddress } from "./logic";
-import { getAccount } from "./api";
+import { getAccountRaw } from "./api";
 import { MinaNewAccountWarning, MinaActivationFeeNotCovered } from "./errors";
 
 const getTransactionStatus = async (
@@ -30,9 +30,9 @@ const getTransactionStatus = async (
 
   let recipientIsNewAccount;
   try {
-    await getAccount(t.recipient);
+    await getAccountRaw(t.recipient);
   } catch (e: any) {
-    if (e.name === "MinaAccountNotFound") {
+    if (e.status === 404) {
       recipientIsNewAccount = true;
     }
   }

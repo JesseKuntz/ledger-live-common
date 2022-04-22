@@ -4,20 +4,10 @@ import { getEnv } from "../../../env";
 import { encodeOperationId } from "../../../operation";
 import { Operation, OperationType } from "../../../types";
 import { MinaTransaction, MinaOperationExtra, MinaAccount } from "./sdk.types";
-import { MinaAccountNotFound } from "../errors";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
 const getIndexerUrl = (route: string): string =>
   `${getEnv("API_MINA_INDEXER")}${route || ""}`;
-
-const fetchAccountDetails = async (address: string) => {
-  const { data } = await network({
-    method: "GET",
-    url: getIndexerUrl(`/accounts/${address}`),
-  });
-
-  return data;
-};
 
 const fetchStatus = async () => {
   const { data } = await network({
@@ -51,19 +41,29 @@ const fetchTransactions = async (
   return data;
 };
 
+export const getAccountRaw = async (address: string) => {
+  const { data } = await network({
+    method: "GET",
+    url: getIndexerUrl(`/accounts/${address}`),
+  });
+
+  return data;
+};
+
 export const getAccount = async (address: string): Promise<MinaAccount> => {
   let accountDetails;
 
   try {
-    accountDetails = await fetchAccountDetails(address);
+    accountDetails = await getAccountRaw(address);
   } catch (e: any) {
     if (e.status === 404) {
-      throw new MinaAccountNotFound("Account not found", {
-        reason: "account not activated",
-      });
+      accountDetails = {
+        balance: 0,
+        nonce: 0,
+      };
+    } else {
+      throw e;
     }
-
-    throw e;
   }
 
   const balance = new BigNumber(accountDetails.balance);

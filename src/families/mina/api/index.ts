@@ -1,4 +1,5 @@
 export {
+  getAccountRaw,
   getAccount,
   getOperations,
   getLatestTransactions,
