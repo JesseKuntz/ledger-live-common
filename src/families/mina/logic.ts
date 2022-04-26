@@ -55,6 +55,20 @@ export const roundUpBigNumber = (bigNumber: BigNumber): BigNumber => {
 };
 
 /*
+ * Filter out operations from `operations` that are in `existingOperations`.
+ */
+export const removeExistingOperations = (
+  operations: Operation[],
+  existingOperations: Operation[]
+): Operation[] =>
+  operations.filter(
+    (operation) =>
+      !existingOperations.some(
+        (existingOperation) => existingOperation.hash === operation.hash
+      )
+  );
+
+/*
  * Re-encode the signature such that it can be broadcast via GraphQL > 1.3.0alpha3
  * Influenced by: https://github.com/jspada/ledger-app-mina/pull/22
  */

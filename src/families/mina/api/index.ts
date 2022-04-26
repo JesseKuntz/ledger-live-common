@@ -4,4 +4,8 @@ export {
   getOperations,
   getLatestTransactions,
 } from "./indexer-sdk";
-export { getTransactionsFromTransactionPool, sendPayment } from "./graphql-sdk";
+export {
+  getTxsFromTxPool,
+  getTxsFromTxPoolForAccount,
+  sendPayment,
+} from "./graphql-sdk";

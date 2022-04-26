@@ -1,8 +1,5 @@
 import { BigNumber } from "bignumber.js";
-import {
-  getTransactionsFromTransactionPool,
-  getLatestTransactions,
-} from "./api";
+import { getTxsFromTxPool, getLatestTransactions } from "./api";
 import {
   REQUIRED_TRANSACTION_AMOUNT,
   FALLBACK_FEE,
@@ -11,10 +8,13 @@ import {
 } from "./logic";
 
 const getEstimatedFees = async (): Promise<BigNumber> => {
-  let transactions = await getTransactionsFromTransactionPool();
+  const poolTransactions = await getTxsFromTxPool();
+  let transactions;
 
-  if (transactions.length < REQUIRED_TRANSACTION_AMOUNT) {
+  if (poolTransactions.length < REQUIRED_TRANSACTION_AMOUNT) {
     transactions = await getLatestTransactions();
+  } else {
+    transactions = poolTransactions;
   }
 
   transactions = transactions.filter(({ fee }) => fee);

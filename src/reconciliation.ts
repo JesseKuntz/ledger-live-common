@@ -386,6 +386,7 @@ export function patchAccount(
 
   if (
     updatedRaw.minaResources &&
+    // @ts-expect-error types don't overlap
     account.minaResources !== updatedRaw.minaResources
   ) {
     next.minaResources = fromMinaResourcesRaw(updatedRaw.minaResources);

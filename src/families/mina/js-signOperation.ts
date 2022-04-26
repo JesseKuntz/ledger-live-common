@@ -2,40 +2,12 @@ import { BigNumber } from "bignumber.js";
 import { Observable } from "rxjs";
 import { FeeNotLoaded } from "@ledgerhq/errors";
 import type { Transaction } from "./types";
-import type { Account, Operation, SignOperationEvent } from "../../types";
+import type { Account, SignOperationEvent } from "../../types";
 import { open, close } from "../../hw";
-import { encodeOperationId } from "../../operation";
 import Mina from "./hw-app-mina";
 import { buildTransaction } from "./js-buildTransaction";
-import { getNonce, reEncodeRawSignature } from "./logic";
-
-const buildOptimisticOperation = (
-  account: Account,
-  transaction: Transaction,
-  fee: BigNumber
-): Operation => {
-  const type = "OUT";
-
-  const value = new BigNumber(transaction.amount).plus(fee);
-
-  const operation: Operation = {
-    id: encodeOperationId(account.id, "", type),
-    hash: "",
-    type,
-    value,
-    fee,
-    blockHash: null,
-    blockHeight: null,
-    senders: [account.freshAddress],
-    recipients: [transaction.recipient].filter(Boolean),
-    accountId: account.id,
-    transactionSequenceNumber: getNonce(account),
-    date: new Date(),
-    extra: {},
-  };
-
-  return operation;
-};
+import { buildOptimisticOperation } from "./js-buildOptimisticOperation";
+import { reEncodeRawSignature } from "./logic";
 
 const signOperation = ({
   account,

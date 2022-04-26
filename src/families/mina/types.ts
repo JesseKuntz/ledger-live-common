@@ -9,18 +9,24 @@ export type CoreOperationSpecifics = Record<string, never>;
 export type CoreCurrencySpecifics = Record<string, never>;
 export type MinaResources = {
   nonce: number;
+  pendingTransactions: Transaction[];
 };
 export type MinaResourcesRaw = {
   nonce: number;
+  pendingTransactions: TransactionRaw[];
 };
 export type Transaction = TransactionCommon & {
   family: "mina";
   mode: string;
-  fees: BigNumber | null;
+  fees: BigNumber;
+  hash?: string;
+  nonce?: number;
 };
 export type TransactionRaw = TransactionCommonRaw & {
   family: "mina";
   mode: string;
-  fees: string | null;
+  fees: string;
+  hash?: string;
+  nonce?: number;
 };
 export const reflect = (_declare: any) => {};

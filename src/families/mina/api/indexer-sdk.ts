@@ -3,7 +3,11 @@ import network from "../../../network";
 import { getEnv } from "../../../env";
 import { encodeOperationId } from "../../../operation";
 import { Operation, OperationType } from "../../../types";
-import { MinaTransaction, MinaOperationExtra, MinaAccount } from "./sdk.types";
+import {
+  MinaIndexerTransaction,
+  MinaOperationExtra,
+  MinaAccount,
+} from "./sdk.types";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
 const getIndexerUrl = (route: string): string =>
@@ -77,19 +81,22 @@ export const getAccount = async (address: string): Promise<MinaAccount> => {
   };
 };
 
-function isSender(transaction: MinaTransaction, address: string): boolean {
+function isSender(
+  transaction: MinaIndexerTransaction,
+  address: string
+): boolean {
   return transaction.sender === address;
 }
 
 function getOperationType(
-  transaction: MinaTransaction,
+  transaction: MinaIndexerTransaction,
   address: string
 ): OperationType {
   return isSender(transaction, address) ? "OUT" : "IN";
 }
 
 function getOperationValue(
-  transaction: MinaTransaction,
+  transaction: MinaIndexerTransaction,
   address: string
 ): BigNumber {
   return isSender(transaction, address)
@@ -97,7 +104,9 @@ function getOperationValue(
     : new BigNumber(transaction.amount);
 }
 
-function getOperationExtra(transaction: MinaTransaction): MinaOperationExtra {
+function getOperationExtra(
+  transaction: MinaIndexerTransaction
+): MinaOperationExtra {
   return {
     id: transaction.id,
   };
@@ -106,7 +115,7 @@ function getOperationExtra(transaction: MinaTransaction): MinaOperationExtra {
 function transactionToOperation(
   accountId: string,
   address: string,
-  transaction: MinaTransaction
+  transaction: MinaIndexerTransaction
 ): Operation {
   const type = getOperationType(transaction, address);
 
@@ -139,7 +148,9 @@ export const getOperations = async (
   );
 };
 
-export const getLatestTransactions = async (): Promise<MinaTransaction[]> => {
+export const getLatestTransactions = async (): Promise<
+  MinaIndexerTransaction[]
+> => {
   const transactions = await fetchTransactions();
 
   return transactions;

@@ -1,9 +1,27 @@
+import { BigNumber } from "bignumber.js";
 import network from "../../../network";
 import { getEnv } from "../../../env";
-import { MinaTransaction, SendPaymentArgs } from "./sdk.types";
+import { Transaction } from "../types";
+import { MinaGraphQLTransaction, SendPaymentArgs } from "./sdk.types";
 
-export const getTransactionsFromTransactionPool = async (): Promise<
-  MinaTransaction[]
+function pendingTransactionToTransaction(
+  transaction: MinaGraphQLTransaction
+): Transaction {
+  const { fee, amount, receiver, hash, nonce } = transaction;
+
+  return {
+    family: "mina",
+    mode: "send",
+    fees: new BigNumber(fee),
+    amount: new BigNumber(amount),
+    recipient: receiver.publicKey,
+    hash,
+    nonce,
+  };
+}
+
+export const getTxsFromTxPool = async (): Promise<
+  Partial<MinaGraphQLTransaction>[]
 > => {
   const query = `
     query GetPooledCommands {
@@ -24,6 +42,44 @@ export const getTransactionsFromTransactionPool = async (): Promise<
   });
 
   return data?.data?.pooledUserCommands || [];
+};
+
+export const getTxsFromTxPoolForAccount = async (
+  address: string
+): Promise<Transaction[]> => {
+  const query = `
+    query GetPooledCommands($address: PublicKey) {
+      pooledUserCommands(publicKey: $address) {
+        amount
+        fee
+        hash
+        nonce
+        receiver {
+          publicKey
+        }
+      }
+    }
+  `;
+
+  const { data } = await network({
+    method: "POST",
+    url: getEnv("API_MINA_GRAPHQL"),
+    data: {
+      query,
+      variables: { address },
+      operationName: "GetPooledCommands",
+    },
+  });
+
+  let pendingTransactions = data?.data?.pooledUserCommands || [];
+
+  if (pendingTransactions.length) {
+    pendingTransactions = pendingTransactions.map((transaction) =>
+      pendingTransactionToTransaction(transaction)
+    );
+  }
+
+  return pendingTransactions;
 };
 
 export const sendPayment = async ({

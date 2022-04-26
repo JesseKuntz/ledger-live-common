@@ -3,8 +3,9 @@ import { encodeAccountId } from "../../account";
 import type { GetAccountShape } from "../../bridge/jsHelpers";
 import { makeSync, makeScanAccounts, mergeOps } from "../../bridge/jsHelpers";
 
-import { getAccount, getOperations } from "./api";
-import { getLastId } from "./logic";
+import { getAccount, getOperations, getTxsFromTxPoolForAccount } from "./api";
+import { getLastId, removeExistingOperations } from "./logic";
+import { buildOptimisticOperation } from "./js-buildOptimisticOperation";
 
 const getAccountShape: GetAccountShape = async (info) => {
   const { address, initialAccount, currency, derivationMode } = info;
@@ -18,12 +19,18 @@ const getAccountShape: GetAccountShape = async (info) => {
     derivationMode,
   });
 
-  const { blockHeight, balance, spendableBalance, nonce } = await getAccount(
-    address
-  );
+  const [
+    { blockHeight, balance, spendableBalance, nonce },
+    fetchedOperations,
+    pendingTransactions,
+  ] = await Promise.all([
+    getAccount(address),
+    getOperations(accountId, address),
+    getTxsFromTxPoolForAccount(address),
+  ]);
 
   let operations = oldOperations;
-  let newOperations = await getOperations(accountId, address);
+  let newOperations = fetchedOperations;
   operations = mergeOps(operations, newOperations);
   let beforeId = getLastId(newOperations);
   const targetId = operations.length ? operations[0].extra.id : 0;
@@ -39,29 +46,55 @@ const getAccountShape: GetAccountShape = async (info) => {
     } while (--maxIteration && newOperations.length && beforeId > targetId);
   }
 
-  const shape = {
+  return {
     id: accountId,
     balance,
     spendableBalance,
     operationsCount: operations.length,
     blockHeight,
+    operations,
     minaResources: {
       nonce,
+      pendingTransactions,
     },
   };
-
-  return { ...shape, operations };
 };
 
 const postSync = (_, synced) => {
-  let pendingOperations = synced.pendingOperations;
+  let pendingOperations = synced.pendingOperations || [];
+
+  // If there are pending transactions in the pool, merge them with the pending operations
+  if (synced && synced.minaResources.pendingTransactions.length) {
+    let pendingOperationsFromPool =
+      synced.minaResources.pendingTransactions.map((transaction) => {
+        return buildOptimisticOperation(
+          synced,
+          transaction,
+          transaction.fees ?? new BigNumber(0)
+        );
+      });
+
+    pendingOperationsFromPool = removeExistingOperations(
+      pendingOperationsFromPool,
+      pendingOperations
+    );
+
+    pendingOperations = [
+      ...pendingOperations,
+      ...pendingOperationsFromPool,
+    ].sort((a, b) => {
+      if (b.transactionSequenceNumber && a.transactionSequenceNumber) {
+        return b.transactionSequenceNumber - a.transactionSequenceNumber;
+      }
+
+      return a.date.getTime() - b.date.getTime();
+    });
+  }
 
   if (pendingOperations.length) {
-    pendingOperations = synced.pendingOperations.filter(
-      (pendingOperation) =>
-        !synced.operations.some(
-          (operation) => operation.hash === pendingOperation.hash
-        )
+    pendingOperations = removeExistingOperations(
+      pendingOperations,
+      synced.operations
     );
   }
 

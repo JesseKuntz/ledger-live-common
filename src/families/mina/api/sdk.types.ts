@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 
-export type MinaTransaction = {
+export type MinaIndexerTransaction = {
   id: number;
   hash: string;
   type: string;
@@ -18,6 +18,16 @@ export type MinaTransaction = {
   failure_reason: string;
   sequence_number: number;
   secondary_sequence_number: number;
+};
+
+export type MinaGraphQLTransaction = {
+  amount: string;
+  fee: string;
+  hash: string;
+  nonce: number;
+  receiver: {
+    publicKey: string;
+  };
 };
 
 export type MinaOperationExtra = {
