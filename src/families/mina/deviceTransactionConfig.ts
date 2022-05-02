@@ -1,3 +1,4 @@
+import { BigNumber } from "bignumber.js";
 import type { AccountLike, Account, TransactionStatus } from "../../types";
 import type { Transaction } from "./types";
 import { getNonce } from "./logic";
@@ -19,6 +20,12 @@ function getDeviceTransactionConfig({
   const currency = getCryptoCurrencyById("mina");
   const fields: Array<DeviceTransactionField> = [];
 
+  const formatValue = (value: BigNumber) =>
+    formatCurrencyUnit(currency.units[0], value, {
+      showCode: true,
+      disableRounding: true,
+    });
+
   fields.push({
     type: "text",
     label: "Type",
@@ -31,17 +38,16 @@ function getDeviceTransactionConfig({
 
   if (!estimatedFees.isZero()) {
     fields.push({
-      type: "fees",
+      type: "text",
       label: "Fee",
+      value: formatValue(estimatedFees),
     });
   }
 
   fields.push({
     type: "text",
     label: "Total",
-    value: formatCurrencyUnit(currency.units[0], totalSpent, {
-      showCode: true,
-    }),
+    value: formatValue(totalSpent),
   });
   fields.push({
     type: "text",
