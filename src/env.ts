@@ -80,6 +80,16 @@ const envDefinitions = {
     def: "https://live.ledger.dev.zondax.net/blockchain/filecoin", // FIXME Filecoin - Set the correct value for ledger proxy
     desc: "Filecoin API url",
   },
+  API_NEAR_ARCHIVE_NODE: {
+    def: "http://localhost:4444/",
+    parser: stringParser,
+    desc: "Archive node endpoint for NEAR",
+  },
+  API_NEAR_INDEXER: {
+    def: "http://localhost:5555/",
+    parser: stringParser,
+    desc: "Explorer API for NEAR",
+  },
   API_POLKADOT_INDEXER: {
     parser: stringParser,
     def: "https://polkadot.coin.ledger.com",
