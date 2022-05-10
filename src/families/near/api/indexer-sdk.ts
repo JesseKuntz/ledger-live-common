@@ -43,7 +43,6 @@ export const getAccount = async (
   try {
     accountDetails = await fetchAccountDetails(address);
   } catch (e: any) {
-    // TODO: check if an actual error is caught
     if (e.status === 404) {
       accountDetails = {
         amount: "0",
@@ -108,16 +107,15 @@ function transactionToOperation(
     extra: {},
     senders: transaction.sender ? [transaction.sender] : [],
     recipients: transaction.receiver ? [transaction.receiver] : [],
-    hasFailed: transaction.success,
+    hasFailed: !transaction.success,
   };
 }
 
 export const getOperations = async (
   accountId: string,
-  address: string,
-  beforeId = 0
+  address: string
 ): Promise<Operation[]> => {
-  const rawTransactions = await fetchTransactions(address, beforeId);
+  const rawTransactions = await fetchTransactions(address);
 
   return rawTransactions.map((transaction) =>
     transactionToOperation(accountId, address, transaction)

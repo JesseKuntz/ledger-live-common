@@ -81,12 +81,12 @@ const envDefinitions = {
     desc: "Filecoin API url",
   },
   API_NEAR_ARCHIVE_NODE: {
-    def: "http://localhost:4444/",
+    def: "http://localhost:4444",
     parser: stringParser,
     desc: "Archive node endpoint for NEAR",
   },
   API_NEAR_INDEXER: {
-    def: "http://localhost:5555/",
+    def: "http://localhost:5555",
     parser: stringParser,
     desc: "Explorer API for NEAR",
   },

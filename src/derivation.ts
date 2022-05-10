@@ -164,6 +164,10 @@ const modes = Object.freeze({
   solanaSub: {
     overridesDerivation: "44'/501'/<account>'",
   },
+  nearbip44h: {
+    overridesDerivation: "44'/397'/0'/0'/<account>'",
+    mandatoryEmptyAccountSkip: 1,
+  },
 });
 modes as Record<DerivationMode, ModeSpec>; // eslint-disable-line
 
@@ -179,6 +183,7 @@ const legacyDerivations: Record<CryptoCurrencyIds, DerivationMode[]> = {
   stellar: ["sep5"],
   polkadot: ["polkadotbip44"],
   filecoin: ["filecoin"],
+  near: ["nearbip44h"],
 };
 
 const legacyDerivationsPerFamily: Record<string, DerivationMode[]> = {
@@ -338,11 +343,13 @@ const disableBIP44 = {
   stellar: true,
   polkadot: true,
   solana: true,
+  near: true,
 };
 const seedIdentifierPath = {
   neo: ({ purpose, coinType }) => `${purpose}'/${coinType}'/0'/0/0`,
   filecoin: ({ purpose, coinType }) => `${purpose}'/${coinType}'/0'/0/0`,
   solana: ({ purpose, coinType }) => `${purpose}'/${coinType}'`,
+  near: ({ purpose, coinType }) => `${purpose}'/${coinType}'/0'/0'/0'`,
   _: ({ purpose, coinType }) => `${purpose}'/${coinType}'/0'`,
 };
 export const getSeedIdentifierDerivation = (
