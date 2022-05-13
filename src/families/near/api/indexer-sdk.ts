@@ -3,8 +3,8 @@ import network from "../../../network";
 import { getEnv } from "../../../env";
 import { encodeOperationId } from "../../../operation";
 import { Account, Operation, OperationType } from "../../../types";
-import { STORAGE_MAGNITUDE } from "../logic";
 import { NearTransaction, NearAccount } from "./sdk.types";
+import { getStorageCost } from "./archive-node-sdk";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
 const getIndexerUrl = (route: string): string =>
@@ -54,10 +54,10 @@ export const getAccount = async (
     }
   }
 
+  const storageCost = await getStorageCost();
+
   const balance = new BigNumber(accountDetails.amount);
-  // TODO: use current storage price
-  const storageUsage =
-    accountDetails.storage_usage / Math.pow(10, STORAGE_MAGNITUDE);
+  const storageUsage = storageCost.multipliedBy(accountDetails.storage_usage);
 
   return {
     blockHeight: accountDetails.block_height,
