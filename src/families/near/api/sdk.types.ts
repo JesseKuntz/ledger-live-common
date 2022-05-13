@@ -21,3 +21,11 @@ export type NearTransaction = {
     }
   ];
 };
+
+export type NearProtocolConfig = {
+  result: {
+    runtime_config: {
+      storage_amount_per_byte: string;
+    };
+  };
+};

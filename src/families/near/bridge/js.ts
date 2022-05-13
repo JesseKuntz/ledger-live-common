@@ -3,6 +3,12 @@ import type { Transaction } from "../types";
 import { makeAccountBridgeReceive } from "../../../bridge/jsHelpers";
 
 import { sync, scanAccounts } from "../js-synchronisation";
+import {
+  createTransaction,
+  updateTransaction,
+  prepareTransaction,
+} from "../js-transaction";
+import getTransactionStatus from "../js-getTransactionStatus";
 
 const receive = makeAccountBridgeReceive();
 
@@ -10,22 +16,6 @@ const currencyBridge: CurrencyBridge = {
   preload: () => Promise.resolve({}),
   hydrate: () => {},
   scanAccounts,
-};
-
-const createTransaction = () => {
-  throw new Error("createTransaction not implemented");
-};
-
-const prepareTransaction = () => {
-  throw new Error("prepareTransaction not implemented");
-};
-
-const updateTransaction = () => {
-  throw new Error("updateTransaction not implemented");
-};
-
-const getTransactionStatus = () => {
-  throw new Error("getTransactionStatus not implemented");
 };
 
 const estimateMaxSpendable = () => {

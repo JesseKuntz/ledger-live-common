@@ -3,7 +3,7 @@ import network from "../../../network";
 import { getEnv } from "../../../env";
 import { encodeOperationId } from "../../../operation";
 import { Account, Operation, OperationType } from "../../../types";
-import { FEE_BUFFER, STORAGE_MAGNITUDE } from "../logic";
+import { STORAGE_MAGNITUDE } from "../logic";
 import { NearTransaction, NearAccount } from "./sdk.types";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
@@ -55,13 +55,14 @@ export const getAccount = async (
   }
 
   const balance = new BigNumber(accountDetails.amount);
+  // TODO: use current storage price
   const storageUsage =
     accountDetails.storage_usage / Math.pow(10, STORAGE_MAGNITUDE);
 
   return {
     blockHeight: accountDetails.block_height,
     balance,
-    spendableBalance: balance.minus(FEE_BUFFER).minus(storageUsage),
+    spendableBalance: balance.minus(storageUsage),
   };
 };
 
