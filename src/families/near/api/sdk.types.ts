@@ -29,3 +29,8 @@ export type NearProtocolConfig = {
     };
   };
 };
+
+export type NearAccessKey = {
+  nonce: number;
+  block_hash: string;
+};
