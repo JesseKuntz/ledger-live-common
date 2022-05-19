@@ -9,6 +9,8 @@ import {
   prepareTransaction,
 } from "../js-transaction";
 import getTransactionStatus from "../js-getTransactionStatus";
+import signOperation from "../js-signOperation";
+import broadcast from "../js-broadcast";
 
 const receive = makeAccountBridgeReceive();
 
@@ -20,14 +22,6 @@ const currencyBridge: CurrencyBridge = {
 
 const estimateMaxSpendable = () => {
   throw new Error("estimateMaxSpendable not implemented");
-};
-
-const signOperation = () => {
-  throw new Error("signOperation not implemented");
-};
-
-const broadcast = () => {
-  throw new Error("broadcast not implemented");
 };
 
 const accountBridge: AccountBridge<Transaction> = {
