@@ -27,4 +27,14 @@ export default class Near {
       publicKey: publicKey.toString(),
     };
   }
+
+  async signTransaction(
+    transaction: Uint8Array,
+    path: string
+  ): Promise<string> {
+    const client = await createClient(this.transport);
+    const signature = await client.sign(transaction, path);
+
+    return signature;
+  }
 }
