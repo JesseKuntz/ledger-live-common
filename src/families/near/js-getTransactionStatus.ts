@@ -11,7 +11,8 @@ import type { Account, TransactionStatus } from "../../types";
 import { formatCurrencyUnit, getCryptoCurrencyById } from "../../currencies";
 import type { Transaction } from "./types";
 import { isValidAddress, NEW_ACCOUNT_SIZE } from "./logic";
-import { fetchAccountDetails, getStorageCost } from "./api";
+import { fetchAccountDetails } from "./api";
+import { getCurrentNearPreloadData } from "./preload";
 import {
   NearNewAccountWarning,
   NearActivationFeeNotCovered,
@@ -32,7 +33,7 @@ const getTransactionStatus = async (
   } = {};
   const useAllAmount = !!t.useAllAmount;
 
-  const storageCost = await getStorageCost();
+  const { storageCost } = getCurrentNearPreloadData();
 
   const newAccountStorageCost = storageCost.multipliedBy(NEW_ACCOUNT_SIZE);
   const currency = getCryptoCurrencyById("near");

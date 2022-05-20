@@ -4,7 +4,7 @@ import { getEnv } from "../../../env";
 import { encodeOperationId } from "../../../operation";
 import { Account, Operation, OperationType } from "../../../types";
 import { NearTransaction, NearAccount } from "./sdk.types";
-import { getStorageCost } from "./archive-node-sdk";
+import { getCurrentNearPreloadData } from "../preload";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
 const getIndexerUrl = (route: string): string =>
@@ -54,7 +54,7 @@ export const getAccount = async (
     }
   }
 
-  const storageCost = await getStorageCost();
+  const { storageCost } = getCurrentNearPreloadData();
 
   const balance = new BigNumber(accountDetails.amount);
   const storageUsage = storageCost.multipliedBy(accountDetails.storage_usage);

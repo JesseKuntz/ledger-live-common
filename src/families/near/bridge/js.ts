@@ -11,12 +11,14 @@ import {
 import getTransactionStatus from "../js-getTransactionStatus";
 import signOperation from "../js-signOperation";
 import broadcast from "../js-broadcast";
+import { preload, hydrate, getPreloadStrategy } from "../preload";
 
 const receive = makeAccountBridgeReceive();
 
 const currencyBridge: CurrencyBridge = {
-  preload: () => Promise.resolve({}),
-  hydrate: () => {},
+  preload,
+  hydrate,
+  getPreloadStrategy,
   scanAccounts,
 };
 

@@ -15,3 +15,7 @@ export type TransactionRaw = TransactionCommonRaw & {
   mode: string;
   fees?: string;
 };
+
+export type NearPreloadedData = {
+  storageCost: BigNumber;
+};
