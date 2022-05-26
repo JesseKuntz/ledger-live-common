@@ -5,6 +5,7 @@ import { encodeOperationId } from "../../../operation";
 import { Account, Operation, OperationType } from "../../../types";
 import { NearTransaction, NearAccount } from "./sdk.types";
 import { getCurrentNearPreloadData } from "../preload";
+import { MIN_ACCOUNT_BALANCE_BUFFER } from "../logic";
 
 const DEFAULT_TRANSACTIONS_LIMIT = 100;
 const getIndexerUrl = (route: string): string =>
@@ -58,11 +59,18 @@ export const getAccount = async (
 
   const balance = new BigNumber(accountDetails.amount);
   const storageUsage = storageCost.multipliedBy(accountDetails.storage_usage);
+  const minBalanceBuffer = new BigNumber(MIN_ACCOUNT_BALANCE_BUFFER);
+
+  let spendableBalance = balance.minus(storageUsage).minus(minBalanceBuffer);
+
+  if (spendableBalance.lt(0)) {
+    spendableBalance = new BigNumber(0);
+  }
 
   return {
     blockHeight: accountDetails.block_height,
     balance,
-    spendableBalance: balance.minus(storageUsage),
+    spendableBalance,
   };
 };
 

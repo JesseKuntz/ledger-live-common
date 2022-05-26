@@ -20,3 +20,10 @@ export const NearNewNamedAccountError = createCustomErrorClass(
 export const NearActivationFeeNotCovered = createCustomErrorClass(
   "NearActivationFeeNotCovered"
 );
+
+/*
+ * When the protocol config can not be loaded.
+ */
+export const NearProtocolConfigNotLoaded = createCustomErrorClass(
+  "NearProtocolConfigNotLoaded"
+);

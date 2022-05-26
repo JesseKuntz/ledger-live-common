@@ -1,10 +1,8 @@
-import { BigNumber } from "bignumber.js";
 import network from "../../../network";
 import { getEnv } from "../../../env";
-import { FALLBACK_STORAGE_AMOUNT_PER_BYTE } from "../logic";
 import { NearAccessKey, NearProtocolConfig } from "./sdk.types";
 
-const fetchProtocolConfig = async (): Promise<NearProtocolConfig> => {
+export const getProtocolConfig = async (): Promise<NearProtocolConfig> => {
   const { data } = await network({
     method: "POST",
     url: getEnv("API_NEAR_ARCHIVE_NODE"),
@@ -18,16 +16,22 @@ const fetchProtocolConfig = async (): Promise<NearProtocolConfig> => {
     },
   });
 
-  return data;
+  return data.result;
 };
 
-export const getStorageCost = async (): Promise<BigNumber> => {
-  const protocolConfig = await fetchProtocolConfig();
+export const getGasPrice = async (): Promise<string> => {
+  const { data } = await network({
+    method: "POST",
+    url: getEnv("API_NEAR_ARCHIVE_NODE"),
+    data: {
+      jsonrpc: "2.0",
+      id: "id",
+      method: "gas_price",
+      params: [null],
+    },
+  });
 
-  return new BigNumber(
-    protocolConfig?.result?.runtime_config?.storage_amount_per_byte ||
-      FALLBACK_STORAGE_AMOUNT_PER_BYTE
-  );
+  return data?.result?.gas_price;
 };
 
 export const getAccessKey = async ({

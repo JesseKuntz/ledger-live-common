@@ -11,6 +11,7 @@ import {
 import getTransactionStatus from "../js-getTransactionStatus";
 import signOperation from "../js-signOperation";
 import broadcast from "../js-broadcast";
+import estimateMaxSpendable from "../js-estimateMaxSpendable";
 import { preload, hydrate, getPreloadStrategy } from "../preload";
 
 const receive = makeAccountBridgeReceive();
@@ -20,10 +21,6 @@ const currencyBridge: CurrencyBridge = {
   hydrate,
   getPreloadStrategy,
   scanAccounts,
-};
-
-const estimateMaxSpendable = () => {
-  throw new Error("estimateMaxSpendable not implemented");
 };
 
 const accountBridge: AccountBridge<Transaction> = {

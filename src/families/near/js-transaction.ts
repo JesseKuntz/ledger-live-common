@@ -2,8 +2,8 @@ import { $Shape } from "utility-types";
 import { BigNumber } from "bignumber.js";
 import type { Account } from "../../types";
 import type { Transaction } from "./types";
-
 import getEstimatedFees from "./js-getFeesForTransaction";
+import estimateMaxSpendable from "./js-estimateMaxSpendable";
 
 export const createTransaction = (): Transaction => ({
   family: "near",
@@ -19,13 +19,17 @@ export const updateTransaction = (
   patch: $Shape<Transaction>
 ): Transaction => ({ ...t, ...patch });
 
-export const prepareTransaction = async (a: Account, t: Transaction) => {
-  const fees = await getEstimatedFees();
+export const prepareTransaction = async (
+  a: Account,
+  t: Transaction
+): Promise<Transaction> => {
+  const fees = await getEstimatedFees(t.recipient);
 
-  // TODO: set amount to estimateMaxSpendable when sending max
-  // https://github.com/JesseKuntz/ledger-live-common/blob/mina-integration/src/families/mina/js-transaction.ts#L28-L30
   const amount = t.useAllAmount
-    ? await a.spendableBalance.minus(fees)
+    ? await estimateMaxSpendable({
+        account: a,
+        calculatedFees: fees,
+      })
     : t.amount;
 
   return { ...t, fees, amount };

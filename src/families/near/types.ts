@@ -18,4 +18,12 @@ export type TransactionRaw = TransactionCommonRaw & {
 
 export type NearPreloadedData = {
   storageCost: BigNumber;
+  createAccountCostSend: BigNumber;
+  createAccountCostExecution: BigNumber;
+  transferCostSend: BigNumber;
+  transferCostExecution: BigNumber;
+  addKeyCostSend: BigNumber;
+  addKeyCostExecution: BigNumber;
+  receiptCreationSend: BigNumber;
+  receiptCreationExecution: BigNumber;
 };

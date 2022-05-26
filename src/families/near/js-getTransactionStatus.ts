@@ -10,7 +10,7 @@ import {
 import type { Account, TransactionStatus } from "../../types";
 import { formatCurrencyUnit, getCryptoCurrencyById } from "../../currencies";
 import type { Transaction } from "./types";
-import { isValidAddress, NEW_ACCOUNT_SIZE } from "./logic";
+import { isValidAddress, NEW_ACCOUNT_SIZE, isImplicitAccount } from "./logic";
 import { fetchAccountDetails } from "./api";
 import { getCurrentNearPreloadData } from "./preload";
 import {
@@ -57,13 +57,13 @@ const getTransactionStatus = async (
       if (e.status === 404) {
         recipientIsNewAccount = true;
 
-        if (t.recipient.includes(".")) {
-          errors.recipient = new NearNewNamedAccountError(
-            "The recipient account is not created yet. It needs to be created in the NEAR wallet."
-          );
-        } else {
+        if (isImplicitAccount(t.recipient)) {
           warnings.recipient = new NearNewAccountWarning(
             `The recipient account is not created yet. The protocol requires a ${formattedNewAccountStorageCost} transfer to create it.`
+          );
+        } else {
+          errors.recipient = new NearNewNamedAccountError(
+            "The recipient account is not created yet. It needs to be created in the NEAR wallet."
           );
         }
       }

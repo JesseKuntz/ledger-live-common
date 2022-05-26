@@ -23,9 +23,29 @@ export type NearTransaction = {
 };
 
 export type NearProtocolConfig = {
-  result: {
-    runtime_config: {
-      storage_amount_per_byte: string;
+  runtime_config: {
+    storage_amount_per_byte: string;
+    transaction_costs: {
+      action_creation_config: {
+        add_key_cost: {
+          full_access_cost: {
+            execution: number;
+            send_not_sir: number;
+          };
+        };
+        create_account_cost: {
+          execution: number;
+          send_not_sir: number;
+        };
+        transfer_cost: {
+          execution: number;
+          send_not_sir: number;
+        };
+      };
+      action_receipt_creation_config: {
+        execution: number;
+        send_not_sir: number;
+      };
     };
   };
 };
